@@ -12,51 +12,51 @@ Script
 ===============
 On WebCommander, users trigger a script from the web interface. Each script parameter displays as a web form field whose name, help message, necessity and value sets are all clear to the user at a glance. 
 
-![1](https://dl.dropbox.com/s/guxkboiigxzqsrc/2016R-01.png)
+![1](https://dl.dropbox.com/s/lgutit9o6qb3dtr/2016R-01.png)
 
 The web GUI also displays script result far more human friendly. Especially when it returns a large number of items, the paged tabular output could be easily sorted and filtered. 
 
-![2](https://dl.dropbox.com/s/mkflx0pw24tczcl/2016R-02.png)
+![2](https://dl.dropbox.com/s/6rdij3oycnyeido/2016R-02.png)
  
 Behind the user friendly GUI, WebCommander actually generates outputs in JSON format, which makes it easy to be consumed programmatically from other applications.
 
-![3](https://dl.dropbox.com/s/r7whnoltwwvuhhy/2016R-03.png)
+![3](https://dl.dropbox.com/s/jvz9fd1e3746svn/2016R-03.png)
 
 All execution results are saved on server as JSON files or stored in MongoDB. They could be retrieved by running the built-in “History” command.
 
-![4](https://dl.dropbox.com/s/h1v0ryq6kiysuej/2016R-04.png)
+![4](https://dl.dropbox.com/s/d86semekf6rhaoj/2016R-04.png)
 
 Workflow
 ===============
 WebCommander allows to run multiple scripts together. This is called workflow.
 
-![5](https://dl.dropbox.com/s/7lylkc0eore6f5g/2016R-05.png)
+![5](https://dl.dropbox.com/s/pomjyg6hw4yzby9/2016R-05.png)
 
 A workflow could run scripts one by one (serial) or all at the same time (parallel).
 * Serial workflow
 
-![6](https://dl.dropbox.com/s/jl8z5hat35gmtff/2016R-06.png) 
+![6](https://dl.dropbox.com/s/llod249ebrdlfwk/2016R-06.png)
 
 * Parallel workflow
 
-![7](https://dl.dropbox.com/s/5mwzo4etllrklzd/2016R-07.png) 
+![7](https://dl.dropbox.com/s/6lppxx115ctd178/2016R-07.png)
 
 On the web GUI, users could add / delete / enable / disable / move scripts simply with mouse clicks 
 A workflow could be imported and exported as a JSON string, which could also be saved on WebCommander server for future reuse.
 
-![8](https://dl.dropbox.com/s/wo03ekudvqr90s9/2016R-08.png)
+![8](https://dl.dropbox.com/s/d56ch7sudbpfp8g/2016R-08.png)
 
 Embedded Workflow
 =================
 A workflow could be turned into a single command and then embedded into other workflows. Consequently it’s able to map any execution sequence, no matter how complicate it is.
 
-![9](https://dl.dropbox.com/s/pbdmjdx7fez04nb/2016R-09.png) 
+![9](https://dl.dropbox.com/s/2vqnhmlx8sjsjx4/2016R-09.png)
 
 Share scripts
 =================
 WebCommander could not only run scripts located on its local disk but also those stored on internet. For instance in the script definition JSON below, script location is http://bit.ly/1Rc823E.
 
-![10](https://dl.dropbox.com/s/0rxhs3eh2di7670/2016R-10.png)
+![10](https://dl.dropbox.com/s/ruqt2061lt8fjc5/2016R-10.png)
 
 The script definition JSON file itself could be on internet as well. To share Powershell scripts with other WebCommander users, we would simply 
 * put all scripts and the definition JSON file on a public web server, such as AWS, OneDrive, Github and Dropbox
@@ -64,7 +64,7 @@ The script definition JSON file itself could be on internet as well. To share Po
 
 To use those shared scripts, we just add the URL to sources.json
 
-![11](https://dl.dropbox.com/s/hyt9ihcnpd7ak9g/2016R-11.png)
+![11](https://dl.dropbox.com/s/lcslwg9k4djw5dk/2016R-11.png)
 
 Video Tutorials
 ===============
