@@ -1,0 +1,257 @@
+.vmwarelogo{
+  background: url("//www.vmware.com/files/images/framework/logo-b.png") no-repeat scroll 0 0 transparent !important;
+  height: 27px;
+  width: 172px !important;
+}
+body { 
+	background:#1697D1;
+	margin:0px; 
+	padding:0px; 
+	width:100%; 
+	color:white; 
+	font:normal 14px/1.8em 'Roboto Condensed';
+	background-image:url('http://img00.deviantart.net/fcd9/i/2011/034/f/2/dark_bridge_wallpaper_by_kevdog32-d38r6x6.jpg');
+	background-repeat:no-repeat;
+	background-attachment:fixed;
+	background-position:top right;
+  -webkit-background-size: cover; /* For WebKit*/
+  -moz-background-size: cover;    /* Mozilla*/
+  -o-background-size: cover;      /* Opera*/
+  background-size: cover;         /* Generic*/
+}
+#sortable{
+	margin: 10px 45px 45px 45px;
+}
+#widgets {
+  /*position: fixed;
+  bottom: 0px;
+  background:#323235;*/
+  width:100%;
+  text-align: center;
+  vertical-align: middle;
+  margin-top:20px;
+	padding:0;
+	border-bottom:2px solid black;
+  border-top:1px solid white;
+  /*background-color:rgba(0, 0, 0, 0.6);
+  background-image: repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px);*/
+  background-image:url('http://www.transparenttextures.com/patterns/my-little-plaid.png');
+}
+.col {
+  text-align: center; 
+  width: 360px;
+  margin: 15px;
+  display: inline-block;
+  vertical-align: middle;
+}
+#header {
+	margin: 30px 50px 0px 50px;
+	padding:10px; 
+	overflow:hidden;
+}
+#logo { 
+	font:normal 39px/1.2em 'Roboto Condensed'; 
+	letter-spacing:-2px;
+	float:left;
+	display:inline-block;
+}
+#logo span { color:gold;}
+#execute { 
+	float:right;
+	display:inline-block;
+  font-size: 48px;
+  vertical-align: middle;
+}
+
+#iteration {
+	background-image:url('images/button-repeat-icon.png');
+	background-color:transparent;
+	background-repeat:no-repeat;
+	background-position: center; 
+	height: 64px;
+	font: 30px/1.2em 'Roboto Condensed';
+	display:inline-block;
+	vertical-align: top;
+	text-align:center;
+	border:0px;
+	color:white;
+	width:128px;
+}
+.command {
+	margin-bottom: 0px;
+  margin-top: 0px;
+	position: relative;
+  background: rgba(255, 255, 255, .5);
+  background-image:url('http://www.transparenttextures.com/patterns/squairy.png');
+  border-top:1px solid white;
+	border-bottom:1px solid black;
+  border-left:1px solid white;
+  border-right:1px solid black;
+	border-radius: 7px;
+}
+.cmdhead{
+  width: 100%;
+  color: black;
+  cursor: move;
+  padding: 5px 30px 5px 30px;
+  text-shadow: 0px 2px 3px #333;
+}
+.num, .des, .ctr, .sta { 
+  text-align: left;
+  font-size: 18px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.ctr {
+  text-align: right;
+  font-size: 32px;
+}
+.description {
+	margin-top:7px; text-align:left; display:inline-block; margin-left:30px; margin-right:30px;
+}
+.shadow {
+  text-shadow: 0px 2px 3px #333;
+}
+.sta {
+  text-align:right;
+  font-size:24px;
+  width: 30%;
+}
+.content, .detail {
+	margin: 0 65px 0 65px;
+}
+
+.highlight {
+  background-color:gold;
+}
+
+a.logo, a.logo:hover {
+	text-decoration:none;
+	color:white;
+}
+select.cmdlist{
+  font:normal 20px 'Roboto Condensed';
+  background: transparent;
+  padding: 5px;
+  color:black;
+  line-height: 1;
+  border: 0;
+  border-radius: 0;
+  -webkit-appearance: none;
+  float:left;
+}
+textarea {
+	width:100%;
+	height:40px;
+}
+textarea.json
+{
+	border:1px solid #999999;
+	width:98%;
+	height:500px;
+	margin:5px 0;
+	padding:1%;
+}
+.cmdbody{
+  opacity: .88;
+}
+.box {
+  display: inline-block;
+  border: 1px solid #ccc;
+	-moz-border-radius: 4;
+	-webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+	padding: 4px 7px;
+	outline: 0;
+	-webkit-appearance: none;
+  vertical-align: top;
+}
+.input{
+	font:normal 9px/1.2em 'Roboto Condensed';
+  width: 300px;
+}
+.parlabel1{
+  font: normal 13px 'courier';
+  display: block;
+  width: 300px
+}
+.parlabel2{
+  font: normal 11px 'Roboto Condensed';
+  display: block;
+  width: 300px
+}
+.mandatory{
+  color: red;
+}
+.methodhelp{
+  font: bold 15px 'Roboto Condensed' !important;
+  position: relative;
+  padding: 5px;
+  color: #fff;
+  background: #f3961c;
+  background:-webkit-gradient(linear, 0 0, 0 100%, from(#f9d835), to(#f3961c));
+  background:-moz-linear-gradient(#f9d835, #f3961c);
+  background:-o-linear-gradient(#f9d835, #f3961c);
+  background:linear-gradient(#f9d835, #f3961c);
+  border-radius: 3px;
+  width: 300px;
+}
+.methodhelp:before {
+  content: "";
+  display: block; /* reduce the damage in FF3.0 */
+  position: absolute;
+  top: -15px;
+  right: 50px;
+  width: 0;
+  border-width: 0 15px 15px;
+  border-style: solid;
+  border-color: #f9d835 transparent;
+}
+div.par {
+  /*overflow: left;*/
+  /*display: inline-block;*/
+  margin: 7px;
+}
+hr.separator {
+	clear: both; 
+  float: none; 
+  width: 100%; 
+  height: 1px;
+  margin: 1.4em 0;
+  border: none; 
+  background: #ddd;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    right bottom,
+    color-stop(0, rgb(255,255,255)),
+    color-stop(0.1, rgb(221,221,221)),
+    color-stop(0.9, rgb(221,221,221)),
+    color-stop(1, rgb(255,255,255))
+  );
+  background-image: -moz-linear-gradient(
+    left center,
+    rgb(255,255,255) 0%,
+    rgb(221,221,221) 10%,
+    rgb(221,221,221) 90%,
+    rgb(255,255,255) 100%
+  );
+}
+.parTab {
+	-webkit-column-count: auto;
+	-webkit-column-width: auto;
+	-moz-column-count: auto;
+	-moz-column-width: auto;
+	column-count: auto;
+	column-width: auto;
+}
+.disabled {
+  background: rgba(100, 100, 100, 0.6) !important;
+}
+.fail {
+  color: white !important;
+}
+.pass {
+  color: black !important;
+}
