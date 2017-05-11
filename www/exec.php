@@ -213,7 +213,7 @@ if ($hisid != "") {
     }
     foreach($params as &$param){
       $name = strtolower((string)$param["name"]);
-      if ($req[$name]) { $param["value"] = $req[$name]; }
+      if ($req[$name] and $param["type"] != "password") { $param["value"] = $req[$name]; }
       //if ($param["mandatory"] == 1 && $req[$name] == "" && $_FILES[$name] == "") {
       //  $missParam = true;
       //}
