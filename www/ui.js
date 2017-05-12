@@ -553,23 +553,34 @@ function runCommand(form, cmd, whatNext, runBtn) {
     async: true,
     cache: false,
     contentType: false,
-    processData: false
-  })
-  .success(function(jdata){
-    var kvList = cmd.find('textarea[name="variableList"]').val();
-    var lines = kvList.split("\n");
-    for (var i in lines) {
-      line = lines[i];
-      var variable = line.split(/=(.+)?/);
-      if (variable != ''){
-        var vname = variable[0].trim();
-        var vvalue = eval('jdata.' + variable[1].trim());
-        globalVariable[vname]=vvalue;
+    processData: false,
+    success: function(jdata){
+      var kvList = cmd.find('textarea[name="variableList"]').val();
+      var lines = kvList.split("\n");
+      for (var i in lines) {
+        line = lines[i];
+        var variable = line.split(/=(.+)?/);
+        if (variable != ''){
+          var vname = variable[0].trim();
+          var vvalue = eval('jdata.' + variable[1].trim());
+          globalVariable[vname]=vvalue;
+        }
       }
-    }
 
-    var executionTime = ($.now() - start) / 1000 + " seconds";
-    finishCmd(cmd,executionTime,jdata,whatNext,runBtn);
+      var executionTime = ($.now() - start) / 1000 + " seconds";
+      finishCmd(cmd,executionTime,jdata,whatNext,runBtn);
+    },
+    error: function(error) {
+      var executionTime = ($.now() - start) / 1000 + " seconds";
+      var data = $.parseJSON(cmd.find('.jsonresult').val());
+      data.returncode = error.status;
+      data.output = [{
+        "time": formatTime(),
+        "data": "Fail - HTTP server response: " + error.statusText,
+        "type": "msg"
+      }];
+      finishCmd(cmd,executionTime,data,whatNext,runBtn);
+    }
   });
 }
 
