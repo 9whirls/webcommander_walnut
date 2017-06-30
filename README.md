@@ -77,7 +77,7 @@ Video Tutorials
 
 Installation
 ============
-To deploy webcommander on Windows 2008 or 2012, please follow the instructions at wiki https://github.com/vmware/webcommander/wiki/Installation-and-configuration-guide
+To deploy webcommander on Windows 2008 or 2012, please follow the instructions at https://pascalswereld.nl/2017/06/02/webcommander-walnut-installation-walk-through (by Pascal)
 
 For non server Windows (vista and newer), checkout source code from walnut branch and open www folder from WebMatrix (https://www.microsoft.com/web/webmatrix/)
 
