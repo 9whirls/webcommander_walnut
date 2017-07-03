@@ -1,7 +1,3 @@
-Notification
-===============
-Please note that Mongodb is used to record history. No JSON files will be saved locally under www/history/ folder any longer. Please install Mongodb on webcommander server and create a DB called "webcmd" and a collection called "history". 
-
 Introduction
 ===============
 WebCommander provides the simplest way ever to run and share Powershell scripts. 
