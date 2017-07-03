@@ -173,10 +173,12 @@ $clientIp = getIpAddress();
 $hisid = $req["hisid"];
 
 if ($hisid != "") {
-  $mongoquery = "mongo.exe localhost:27017/webcmd --eval \"db['history'].find({_id:ObjectId('" . $hisid . "')},{_id:0})\"";
-  $log = shell_exec($mongoquery);
-  $log = implode("\n", array_slice(explode("\n", $log), 2));
-  echo $log;
+  header("Content-type:application/json");
+  $m = new Mongo('mongodb://webcmd:9whirls@ds135797.mlab.com:35797/9whirls');
+  $m_collection = $m->selectDB('9whirls')->selectCollection('history');
+  $mongo_id = new MongoID($hisid);
+  $log = $m_collection->findOne(['_id'=>$mongo_id]);
+  echo json_encode($log);
 } elseif ( $script == ""){
   echo json_encode($commands);
 } elseif ($script == "showReturnCode") {
@@ -260,9 +262,9 @@ if ($hisid != "") {
 
     //echo htmlspecialchars(json_encode($target), ENT_NOQUOTES);
     echo json_encode($target);
-    if (!$missParam && $script != "History\\interfaces.ps1") {
-      $m = new MongoClient();
-      $collection = $m->selectCollection('webcmd', 'history');
+    if (!$missParam) {
+      $m = new MongoClient('mongodb://webcmd:9whirls@ds135797.mlab.com:35797/9whirls');
+      $collection = $m->selectCollection('9whirls', 'history');
       $collection->insert($target);
     }
   }

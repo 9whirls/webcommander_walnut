@@ -1,139 +1,50 @@
+<!-- Author: Jian Liu, whirls9@hotmail.com -->
+<html>
+<head>
+<title>webcommander</title>
+<link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="//code.jquery.com/ui/1.11.4/themes/cupertino/jquery-ui.css" rel="stylesheet" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/semantic.min.css" rel="stylesheet" />
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+<table id="exec_hist" class="ui celled table" cellspacing="0" width="100%">
+<thead><tr><th>Time</th><th>Exec Time</th><th>User</th><th>Command</th><th>Method</th><th>Return Code</th><th>Details</th></tr></thead>
+<!--tfoot><tr><th>Time</th><th>Exec Time</th><th>User</th><th>Command</th><th>Method</th><th>Return Code</th><th>Details</th></tr></tfoot-->
+<tbody>
 <?php
-/**
- * Script:    DataTables server-side script for PHP 5.2+ and MongoDB
- * Copyright: 2012 - Kari S?derholm, aka Haprog
- * License:   GPL v2 or BSD (3-point)
- *
- * By default Mongo documents are returned as is like they are stored in the
- * database. You can define which fields to return by overriding the empty
- * $fields array a few rows below.
- *
- * Because MongoDB documents can naturally contain nested data, this script
- * assumes (requires) that you use mDataProp in DataTables to define which
- * fields to display.
- */
- 
-header("Content-type:application/json");
 mb_internal_encoding('UTF-8');
- 
-$database   = 'webcmd';
-$collection = 'history';
- 
-/**
- * MongoDB connection
- */
 try {
-    $m = new Mongo();
+  $m = new Mongo('mongodb://webcmd:9whirls@ds135797.mlab.com:35797/9whirls');
 } catch (MongoConnectionException $e) {
-    die('Error connecting to MongoDB server');
+  die('Error connecting to MongoDB server');
 }
+$m_collection = $m->selectCollection('9whirls', 'history');
  
-$m_collection = $m->$database->$collection;
- 
-/**
- * Define the document fields to return to DataTables (as in http://us.php.net/manual/en/mongocollection.find.php).
- * If empty, the whole document will be returned.
- */
-$fields = array();
- 
-// Input method (use $_GET, $_POST or $_REQUEST)
-$input =& $_GET;
- 
-/**
- * Handle requested DataProps
- */
- 
-// Number of columns being displayed (useful for getting individual column search info)
-$iColumns = $input['iColumns'];
- 
-// Get mDataProp values assigned for each table column
-$dataProps = array();
-for ($i = 0; $i < $iColumns; $i++) {
-    $var = 'mDataProp_'.$i;
-    if (!empty($input[$var]) && $input[$var] != 'null') {
-        $dataProps[$i] = $input[$var];
-    }
+$cursor = $m_collection->find();
+foreach ($cursor as $document) {
+  echo '<tr>';
+  echo '<td>'.$document["time"]."</td>";
+  echo '<td>'.$document["executiontime"]."</td>";
+  echo '<td>'.$document["user"]."</td>";
+  echo '<td>'.$document["synopsis"]."</td>";
+	echo '<td>'.$document["method"]."</td>";
+	echo '<td>'.$document["returncode"]."</td>";
+  echo '<td>';
+  echo '<a target="_blank" href="/exec.php?hisid='.$document["_id"].'">JSON</a>';
+  echo ' | ';
+  echo '<a target="_blank" href="/index.html?exec.php?hisid='.$document["_id"].'">GUI</a>';
+  echo "</td>";
+  echo '</tr>';
 }
- 
-/**
- * Filtering
- * NOTE this does not match the built-in DataTables filtering which does it
- * word by word on any field. It's possible to do here, but concerned about efficiency
- * on very large collections.
- */
-$searchTermsAny = array();
-$searchTermsAll = array();
- 
-if ( !empty($input['sSearch']) ) {
-    $sSearch = $input['sSearch'];
-     
-    for ( $i=0 ; $i < $iColumns ; $i++ ) {
-        if ($input['bSearchable_'.$i] == 'true') {
-            if ($input['bRegex'] == 'true') {
-                $sRegex = str_replace('/', '\/', $sSearch);
-            } else {
-                $sRegex = preg_quote($sSearch, '/');
-            }
-            $searchTermsAny[] = array(
-                $dataProps[$i] => new MongoRegex( '/'.$sRegex.'/i' )
-            );
-        }
-    }
-}
- 
-// Individual column filtering
-for ( $i=0 ; $i < $iColumns ; $i++ ) {
-    if ( $input['bSearchable_'.$i] == 'true' && $input['sSearch_'.$i] != '' ) {
-        if ($input['bRegex_'.$i] == 'true') {
-            $sRegex = str_replace('/', '\/', $input['sSearch_'.$i]);
-        } else {
-            $sRegex = preg_quote($input['sSearch_'.$i], '/');
-        }
-        $searchTermsAll[ $dataProps[$i] ] = new MongoRegex( '/'.$sRegex.'/i' );
-    }
-}
- 
-$searchTerms = $searchTermsAll;
-if (!empty($searchTermsAny)) {
-    $searchTerms['$or'] = $searchTermsAny;
-}
- 
-$cursor = $m_collection->find($searchTerms, $fields);
- 
-/**
- * Paging
- */
-if ( isset( $input['iDisplayStart'] ) && $input['iDisplayLength'] != '-1' ) {
-    $cursor->limit( $input['iDisplayLength'] )->skip( $input['iDisplayStart'] );
-}
- 
-/**
- * Ordering
- */
-if ( isset($input['iSortCol_0']) ) {
-    $sort_fields = array();
-    for ( $i=0 ; $i<intval( $input['iSortingCols'] ) ; $i++ ) {
-        if ( $input[ 'bSortable_'.intval($input['iSortCol_'.$i]) ] == 'true' ) {
-            $field = $dataProps[ intval( $input['iSortCol_'.$i] ) ];
-            $order = ( $input['sSortDir_'.$i]=='desc' ? -1 : 1 );
-            $sort_fields[$field] = $order;
-        }
-    }
-    $cursor->sort($sort_fields);
-}
- 
-/**
- * Output
- */
-$output = array(
-    "sEcho" => intval($input['sEcho']),
-    "iTotalRecords" => $m_collection->count(),
-    "iTotalDisplayRecords" => $cursor->count(),
-    "aaData" => array(),
-);
- 
-foreach ( $cursor as $doc ) {
-    $output['aaData'][] = $doc;
-}
- 
-echo json_encode( $output );
+?>
+</tbody></table>
+</body>
+<script>
+$(document).ready(function() {
+    $('#exec_hist').DataTable();
+} );
+</script>
+</html>
