@@ -85,3 +85,13 @@ Contribution
 ============
 If you want to contribute code or get any idea to improve WebCommander,
 Please contact Jian Liu Skype: whirls9@hotmail.com.
+
+Restful API
+===========
+| API | Method | Payload | Description |
+| --- | --- | --- | --- |
+| api/v1/showCommand | Get |  | List all command definitions |
+| api/v1/showCommand?script=<script path> | Get |  | List the definition of the specified command |
+| api/v1/showHistory | Get |  | List all execution history records |
+| api/v1/showHistory/<history ID> | Get |  | List the history record specified by ID |
+| api/v1/runCommand | Post | JSON string as listed below  | List the history record specified by ID |
