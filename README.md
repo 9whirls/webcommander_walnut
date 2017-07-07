@@ -100,7 +100,7 @@ Restful API
 | api/v1/showCommand?script=<script path> | Get |  | List the definition of the specified command |
 | api/v1/showHistory | Get |  | List all execution history records |
 | api/v1/showHistory/historyID | Get |  | List the history record specified by ID |
-| api/v1/runCommand | Post | JSON string as listed below  | List the history record specified by ID |
+| api/v1/runCommand | Post | JSON string as listed below  | Execute a command specified by the posted JSON string |
 
 ```javascript
 {
