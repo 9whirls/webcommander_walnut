@@ -2,6 +2,7 @@
 /* Author: Jian Liu, whirls9@hotmail.com */
 require_once __DIR__.'/vendor/autoload.php';
 $app = new Silex\Application();
+$app['debug'] = true;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 header("Content-type:application/json");
@@ -172,10 +173,6 @@ foreach($src as $name=>$url) {
   $commands = array_merge_recursive( $commands, $cmds );
 }
 
-$req = array_change_key_case($_REQUEST, CASE_LOWER);
-$script = $req["script"];
-$clientIp = getIpAddress();
-
 $app->get('/api/v1/showReturnCode', function () use ($codeArray) {
   return json_encode($codeArray);
 });
@@ -221,12 +218,51 @@ $app->before(function (Request $request) {
   }
 });
 
-$app->post('/api/v1/runCommand', function (Request $request) {
-  return $request;
-});
-
-$app->get('/hello/{name}', function ($name) use ($app) {
-    return 'Hello '.$app->escape($name);
+$app->post('/api/v1/runCommand', function (Request $request) use ($commands) {
+  $js = json_decode($request->getContent(), true);
+  $js_params = $js['parameters'];
+  $script = $js['script'];
+  global $target;
+  $target = searchCommand($commands, $script);
+  $params = &$target['parameters'];
+  $t0 = microtime(true);
+  $psPath = realpath('../../powershell/');
+  chdir($psPath);
+  $cmd = "set runFromWeb=true & ";
+  $cmd .= "c:\\windows\\sysnative\\windowspowershell\\v1.0\\powershell.exe -noninteractive .\\exec.ps1 ";
+  $cmd .= $script;
+  foreach($js_params as $js_p){
+    if ($js_p["value"] != ""){
+      foreach($params as &$param){
+        if ($js_p["name"] == $param["name"] and $param["type"] != "password") { 
+          $param["value"] = $js_p["value"]; 
+        }
+      }
+      $cmd .= " -" . $js_p["name"] . " " . urlencode($js_p["value"]);
+    }
+  }
+  if ($js["method"] != "") {
+    $cmd .= " -" . $js["method"];
+    $target["method"] = $js["method"];
+  }
+  $cmd .= ' <nul';
+  $cmd .= ' 2>&1';
+  callCmd($cmd);
+  $t1 = microtime(true);
+  $target["executiontime"] = sprintf("%.1f seconds", $t1 - $t0);
+  $user = get_current_user();
+  $userAgent = $_SERVER['HTTP_USER_AGENT'];
+  $userAddr = getIpAddress();
+  $time = time();
+  $target["user"] = $user;
+  $target["useragent"] = $userAgent;
+  $target["useraddr"] = $userAddr;
+  $target["time"] = date('Y-m-d H:i:s',$time);
+  $m = new MongoClient('mongodb://webcmd:9whirls@ds135797.mlab.com:35797/9whirls');
+  $collection = $m->selectCollection('9whirls', 'history');
+  $collection->insert($target);
+  return json_encode($target);
 });
 
 $app->run();
+?>
