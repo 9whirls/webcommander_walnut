@@ -95,3 +95,33 @@ Restful API
 | api/v1/showHistory | Get |  | List all execution history records |
 | api/v1/showHistory/<history ID> | Get |  | List the history record specified by ID |
 | api/v1/runCommand | Post | JSON string as listed below  | List the history record specified by ID |
+
+```javascript
+{
+	"script": "https:\/\/raw.githubusercontent.com\/9whirls\/webcommander_walnut_remote\/master\/windows\/interfaces.ps1",
+ "method": "runScript",
+	"parameters": [{
+		"name": "winAddress",
+		"value": "localhost"
+	},
+	{
+		"name": "winUser",
+		"value": "username"
+	},
+	{
+		"name": "winPassword",
+		"value": "password"
+	},
+	{
+		"name": "scriptText",
+		"value": "get-host"
+	},
+	{
+		"name": "scriptType",
+		"value": "Powershell"
+	}
+	]
+}
+```
+Index.html could generate this JSON string. After running a command through index.html, the result JSON will show in the JSON tab. That JSON string could be used to trigger runCommand API as well.
+
