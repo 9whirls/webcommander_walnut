@@ -80,7 +80,9 @@ Installation
 To deploy webcommander on Windows 2008 or 2012, please follow the instructions at https://pascalswereld.nl/2017/06/02/webcommander-walnut-installation-walk-through (by Pascal)
 
 Restful APIs are implemented via Silex. To install Silex, run the command below under folder www/rest/
-<code>composer require silex/silex:~2.0</code>
+```{r, engine='bash', count_lines}
+composer require silex/silex:~2.0 
+```
 Composer for Windows could be found at https://getcomposer.org/doc/00-intro.md#installation-windows
 
 For non server Windows (vista and newer), checkout source code from walnut branch and open www folder from WebMatrix (https://www.microsoft.com/web/webmatrix/)
