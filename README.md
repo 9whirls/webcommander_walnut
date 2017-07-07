@@ -98,29 +98,22 @@ Restful API
 
 ```javascript
 {
-	"script": "https:\/\/raw.githubusercontent.com\/9whirls\/webcommander_walnut_remote\/master\/windows\/interfaces.ps1",
- "method": "runScript",
-	"parameters": [{
-		"name": "winAddress",
-		"value": "localhost"
-	},
-	{
-		"name": "winUser",
-		"value": "username"
-	},
-	{
-		"name": "winPassword",
-		"value": "password"
-	},
-	{
-		"name": "scriptText",
-		"value": "get-host"
-	},
-	{
-		"name": "scriptType",
-		"value": "Powershell"
-	}
-	]
+  "script": "vSphere\\interfaces.ps1",
+  "method": "listPortgroup",
+  "parameters": [
+    {
+      "name": "serverAddress",
+      "value": "1.1.1.1"
+    },
+    {
+      "name": "serverUser",
+      "value": "root"
+    },
+    {
+      "name": "serverPassword",
+      "value": "password"
+    }
+   ] 
 }
 ```
 Index.html could generate this JSON string. After running a command through index.html, the result JSON will show in the JSON tab. That JSON string could be used to trigger runCommand API as well.
