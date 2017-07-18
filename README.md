@@ -94,7 +94,7 @@ Please contact Jian Liu Skype: whirls9@hotmail.com.
 
 Restful API
 ===========
-| API | Method | Payload | Description |
+| API | Method | Body | Description |
 | --- | --- | --- | --- |
 | api/v1/showCommand | Get |  | List all command definitions |
 | api/v1/showCommand?script=<script path> | Get |  | List the definition of the specified command |
