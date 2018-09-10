@@ -85,6 +85,8 @@ composer require silex/silex:~2.0
 ```
 Composer for Windows could be found at https://getcomposer.org/doc/00-intro.md#installation-windows
 
+Enable URL rewrite on IIS https://www.iis.net/downloads/microsoft/url-rewrite 
+
 For non server Windows (vista and newer), checkout source code from walnut branch and open www folder from WebMatrix (https://www.microsoft.com/web/webmatrix/)
 
 Contribution
