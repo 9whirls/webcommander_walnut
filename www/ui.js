@@ -114,7 +114,6 @@ function drawCmd(cmd, parent) {
   var parTabId = guid();
   var desTabId = guid();
   var varTabId = guid();
-  var urlTabId = guid();
   var jsoTabId = guid();
   var resTabId = guid();
   var impTabId = guid();
@@ -123,7 +122,6 @@ function drawCmd(cmd, parent) {
   cHtml += '<li><a href="#' + parTabId + '">Parameter</a></li>';
   cHtml += '<li><a href="#' + resTabId + '">Result</a></li>';
   cHtml += '<li><a href="#' + jsoTabId + '">JSON</a></li>';
-  cHtml += '<li><a href="#' + urlTabId + '">URL</a></li>';
   //cHtml += '<li><a href="#' + impTabId + '">Import</a></li>';
   //cHtml += '<li><a href="#' + desTabId + '">Description</a></li>';
   cHtml += '<li><a href="#' + varTabId + '">Variable</a></li>';
@@ -131,7 +129,6 @@ function drawCmd(cmd, parent) {
   cHtml += '<div id="' + parTabId + '" class="parTab"></div>';
   cHtml += '<div id="' + resTabId + '" class="resTab"></div>';
   cHtml += '<div id="' + jsoTabId + '" class="jsoTab"></div>';
-  cHtml += '<div id="' + urlTabId + '" class="urlTab"></div>';
   //cHtml += '<div id="' + impTabId + '" class="impTab"></div>';
   //cHtml += '<div id="' + desTabId + '" class="desTab"></div>';
   cHtml += '<div id="' + varTabId + '" class="varTab">\
@@ -528,6 +525,7 @@ function runCmd(cmd, whatNext) {
 function runCommand(form, cmd, whatNext, runBtn) {
   var start = $.now();
   var formData = new FormData();
+  formData.append("script",form.attr('name'));
   $.each(form[0], function(){
     var fieldName = $(this).attr('name');
     if ($(this).attr('type') != 'file') {
@@ -542,12 +540,8 @@ function runCommand(form, cmd, whatNext, runBtn) {
     }
   });
 
-  var urlTab = cmd.find('.urlTab');
-  urlTab.empty();
-  urlTab.append('<textarea class="urltrigger" readonly>exec.php?script=' + form.attr('name') + '&' + form.serialize() + '</textarea>');
-
   $.ajax({
-    url: 'exec.php?script=' + form.attr('name'),
+    url: '/api/v1/runCommand',
     type: 'POST',
     data: formData,
     async: true,
@@ -742,23 +736,6 @@ function updateOrder(){
 }
 
 $(function() {
-  var widgets = '<div id="widgets">\
-	  <div class="col github-widget" data-repo="9whirls/webcommander_walnut"></div>\
-	    <div class="col">\
-		    <a class="twitter-timeline" height="200px" href="https://twitter.com/9whirls/lists/webcommander" data-widget-id="688402101987180544">Tweets from https://twitter.com/9whirls/lists/webcommander</a>\
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?"http":"https";if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>\
-      </div>\
-	    <div class="col">\
-		    <iframe width="360" height="200" src="https://www.youtube.com/embed/videoseries?list=PLwi0cwbJncw13h5CVtojr2ytdHQQVct1k" frameborder="0" allowfullscreen="0"></iframe>\
-	    </div>\
-    </div>';
-  $('#header').after(widgets);
-  $('#widgets').data('size','big');
-  newScript = document.createElement('script');
-  newScript.type = 'text/javascript';
-  newScript.src = '//rawgit.com/JoelSutherland/GitHub-jQuery-Repo-Widget/master/jquery.githubRepoWidget.min.js';
-  document.getElementsByTagName('head')[0].appendChild(newScript);
-
   $.ajaxSetup({
     type: 'GET',
     dataType: 'json',
@@ -859,7 +836,7 @@ $(function() {
     }
   });
 
-  $.get('/exec.php',function(webcmd){
+  $.get('/api/v1/showCommand',function(webcmd){
     $("#sortable").sortable({
       update: function() {
         updateOrder();

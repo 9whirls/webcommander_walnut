@@ -188,27 +188,29 @@ $app->get('/api/v1/showCommand', function (Request $request) use ($commands) {
 });
 
 $app->get('/api/v1/showHistory/', function () {
-  $m = new Mongo('mongodb://webcmd:9whirls@ds135797.mlab.com:35797/9whirls');
-  $m_collection = $m->selectCollection('9whirls', 'history');
-  $cursor = $m_collection->find();
-  $output = array(
-    "sEcho" => intval($input['sEcho']),
-    "iTotalRecords" => $m_collection->count(),
-    "iTotalDisplayRecords" => $cursor->count(),
-    "aaData" => array(),
-  );   
-  foreach ( $cursor as $doc ) {
-    $output['aaData'][] = $doc;
-  } 
-  return json_encode( $output );
+  $m = new MongoDB\Driver\Manager('mongodb://webcmd:9whirls@ds135797.mlab.com:35797/9whirls');
+  $o = [
+    'projection' => [
+      '_id' => 1,
+      'script' => 1,
+      'method' => 1,
+      'executiontime' => 1,
+      'returncode' => 1,
+      'time' => 1
+    ],
+  ];
+  $q = new MongoDB\Driver\Query( [], $o );
+  $cursor = $m->executeQuery("9whirls.history", $q)->toArray();
+  return json_encode( $cursor );
 });
 
 $app->get('/api/v1/showHistory/{id}', function ($id) {
-  $m = new Mongo('mongodb://webcmd:9whirls@ds135797.mlab.com:35797/9whirls');
-  $m_collection = $m->selectCollection('9whirls', 'history');
-  $mongo_id = new MongoID($id);
-  $log = $m_collection->findOne(['_id'=>$mongo_id]);
-  return json_encode($log);
+  $m = new MongoDB\Driver\Manager('mongodb://webcmd:9whirls@ds135797.mlab.com:35797/9whirls');
+  $mongo_id = new MongoDB\BSON\ObjectId($id);
+  $q = new MongoDB\Driver\Query( ['_id' => $mongo_id ] );
+  //$log = $m_collection->findOne(['_id'=>$mongo_id]);
+  $cursor = $m->executeQuery("9whirls.history", $q)->toArray()[0];
+  return json_encode($cursor);
 });
 
 $app->before(function (Request $request) {
@@ -257,10 +259,11 @@ $app->post('/api/v1/runCommand', function (Request $request) use ($commands) {
   $target["user"] = $user;
   $target["useragent"] = $userAgent;
   $target["useraddr"] = $userAddr;
-  $target["time"] = date('Y-m-d H:i:s',$time);
-  $m = new MongoClient('mongodb://webcmd:9whirls@ds135797.mlab.com:35797/9whirls');
-  $collection = $m->selectCollection('9whirls', 'history');
-  $collection->insert($target);
+  $target["time"] = date('Y-m-d H:i:s',$time); 
+  $m = new MongoDB\Driver\Manager('mongodb://webcmd:9whirls@ds135797.mlab.com:35797/9whirls');     
+  $bulkWrite=new MongoDB\Driver\BulkWrite;
+  $bulkWrite->insert($target);
+  $m->executeBulkWrite('9whirls.history', $bulkWrite);
   return json_encode($target);
 });
 

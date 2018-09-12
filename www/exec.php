@@ -121,6 +121,7 @@ function callCmd($cmd) {
   $result = array_slice($result,$pos);
   $result = implode("",str_replace("VERBOSE: ","",$result));
   $target["output"] = json_decode($result);
+  //$target["output"] = $cmd;
   
   if (strpos($result, "Fail - ") === FALSE) {
     header("return-code:4488");
@@ -168,9 +169,9 @@ foreach($src as $name=>$url) {
 }
 
 $req = array_change_key_case($_REQUEST, CASE_LOWER);
-$script = $req["script"];
+$script = isset($_REQUEST["script"]) ? $req["script"] : '';
 $clientIp = getIpAddress();
-$hisid = $req["hisid"];
+$hisid = isset($_REQUEST["hisid"]) ? $req["hisid"] : '';
 
 if ($hisid != "") {
   header("Content-type:application/json");
@@ -211,15 +212,16 @@ if ($hisid != "") {
     } else {
       $psPath = realpath('../powershell/');
       chdir($psPath);
-      $cmd = "set runFromWeb=true & c:\\windows\\sysnative\\windowspowershell\\v1.0\\powershell.exe -noninteractive .\\exec.ps1 " . $script;
+      //$cmd = "set runFromWeb=true & c:\\windows\\sysnative\\windowspowershell\\v1.0\\powershell.exe -noninteractive .\\exec.ps1 " . $script;
+      $cmd = "set runFromWeb=true & powershell.exe -noninteractive .\\exec.ps1 " . $script;
     }
     foreach($params as &$param){
       $name = strtolower((string)$param["name"]);
-      if ($req[$name] and $param["type"] != "password") { $param["value"] = $req[$name]; }
+      if (isset($_REQUEST[$name]) and $param["type"] != "password") { $param["value"] = $req[$name]; }
       //if ($param["mandatory"] == 1 && $req[$name] == "" && $_FILES[$name] == "") {
       //  $missParam = true;
       //}
-      if ($_FILES[$name] != "") {
+      if (isset($_FILES[$name])) {
         if($_FILES[$name]["error"] > 0) {  
           if ($param["mandatory"] == 1 ) {$missFile = true;}
         } else {
@@ -230,7 +232,7 @@ if ($hisid != "") {
           $cmd .= $paramSeparator . $name . " '" . realpath($fileName) . "'"; 
         }
       }
-      if ($req[$name] != "") {
+      if (isset($_REQUEST[$name])) {
         $cmd .= $paramSeparator . $name . " " . urlencode($req[$name]); 
       }
     }
@@ -263,9 +265,10 @@ if ($hisid != "") {
     //echo htmlspecialchars(json_encode($target), ENT_NOQUOTES);
     echo json_encode($target);
     if (!$missParam) {
-      $m = new MongoClient('mongodb://webcmd:9whirls@ds135797.mlab.com:35797/9whirls');
-      $collection = $m->selectCollection('9whirls', 'history');
-      $collection->insert($target);
+      $m = new MongoDB\Driver\Manager('mongodb://webcmd:9whirls@ds135797.mlab.com:35797/9whirls');     
+      $bulkWrite=new MongoDB\Driver\BulkWrite;
+      $bulkWrite->insert($target);
+      $m->executeBulkWrite('9whirls.history', $bulkWrite);
     }
   }
 }
