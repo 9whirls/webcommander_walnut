@@ -524,30 +524,16 @@ function runCmd(cmd, whatNext) {
 
 function runCommand(form, cmd, whatNext, runBtn) {
   var start = $.now();
-  var formData = new FormData();
-  formData.append("script",form.attr('name'));
-  $.each(form[0], function(){
-    var fieldName = $(this).attr('name');
-    if ($(this).attr('type') != 'file') {
-      var fieldValue = $(this).val();
-      fieldValue = parseValue(fieldValue,fieldName);
-      formData.append(fieldName,fieldValue);
-    } else {
-      var fileToUpload = $(this)[0].files[0];
-      if (fileToUpload) {
-        formData.append(fieldName,fileToUpload);
-      }
-    }
-  });
+  var json = cmd.find('.jsonresult').val();
 
   $.ajax({
     url: '/api/v1/runCommand',
     type: 'POST',
-    data: formData,
+    data: json,
     async: true,
     cache: false,
-    contentType: false,
-    processData: false,
+    dataType: 'json',
+    contentType: 'application/json',
     success: function(jdata){
       var kvList = cmd.find('textarea[name="variableList"]').val();
       var lines = kvList.split("\n");

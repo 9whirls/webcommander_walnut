@@ -231,12 +231,13 @@ $app->post('/api/v1/runCommand', function (Request $request) use ($commands) {
   $psPath = realpath('../../powershell/');
   chdir($psPath);
   $cmd = "set runFromWeb=true & ";
-  $cmd .= "c:\\windows\\sysnative\\windowspowershell\\v1.0\\powershell.exe -noninteractive .\\exec.ps1 ";
+  //$cmd .= "c:\\windows\\sysnative\\windowspowershell\\v1.0\\powershell.exe -noninteractive .\\exec.ps1 ";
+  $cmd .= "powershell.exe -noninteractive .\\exec.ps1 ";
   $cmd .= $script;
   foreach($js_params as $js_p){
-    if ($js_p["value"] != ""){
+    if (isset($js_p["value"]) and $js_p["value"] != ""){
       foreach($params as &$param){
-        if ($js_p["name"] == $param["name"] and $param["type"] != "password") { 
+        if (isset($js_p["name"]) and isset($param["name"]) and isset($param["type"]) and $js_p["name"] == $param["name"] and $param["type"] != "password") { 
           $param["value"] = $js_p["value"]; 
         }
       }
