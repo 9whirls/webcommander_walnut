@@ -128,3 +128,8 @@ Restful API
 ```
 Index.html could generate this JSON string. After running a command through index.html, the result JSON will show in the JSON tab. That JSON string could be used to trigger runCommand API as well.
 
+Docker Image
+============
+```bash
+docker run --name webcommander -d -it -v "c:\program files\windowspowershell\modules":"c:\program files\windowspowershell\modules" 9whirls/webcommander:walnut
+```
